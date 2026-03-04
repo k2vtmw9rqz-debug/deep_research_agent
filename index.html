@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>deep_research_agent</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#0a0a12;color:#e0e0f0;min-height:100vh;display:flex;flex-direction:column}.hd{padding:20px 24px;border-bottom:1px solid #1a1a2e;background:#08080e}.hd h1{font-size:18px;margin-bottom:4px}.hd p{font-size:13px;color:#6a6a8a}.tl{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}.tb{padding:2px 10px;border-radius:12px;background:#6366f118;color:#818cf8;font-size:11px;border:1px solid #6366f133}.ch{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px}.ms{max-width:80%;padding:12px 16px;border-radius:14px;font-size:14px;line-height:1.6;white-space:pre-wrap}.ms.u{align-self:flex-end;background:#6366f1;color:#fff;border-bottom-right-radius:4px}.ms.a{align-self:flex-start;background:#12121e;border:1px solid #1a1a2e;border-bottom-left-radius:4px}.ib{padding:16px 20px;border-top:1px solid #1a1a2e;background:#08080e;display:flex;gap:10px}.ib input{flex:1;padding:12px 16px;border-radius:10px;background:#0a0a14;border:1px solid #1a1a2e;color:#e0e0f0;font-size:14px;outline:none}.ib input:focus{border-color:#6366f155}.ib button{padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;font-size:14px;font-weight:600;cursor:pointer}.ib button:disabled{opacity:.5;cursor:not-allowed}.tp{color:#6a6a8a;font-size:13px;padding:8px 16px}
+</style>
+</head>
+<body>
+<div class="hd"><h1>deep_research_agent</h1><p>An AI research agent that conducts comprehensive topic analysis with proper citations and source verification</p><div class="tl"><span class="tb">web_search</span> <span class="tb">extract_content</span> <span class="tb">generate_citation</span> <span class="tb">verify_source</span></div></div>
+<div class="ch" id="ch"></div>
+<div class="ib"><input type="text" id="inp" placeholder="Type a message..." autofocus><button id="btn" onclick="send()">Send</button></div>
+<script>
+var API=window.location.origin,cid=null,ch=document.getElementById('ch'),inp=document.getElementById('inp'),btn=document.getElementById('btn');
+inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!btn.disabled)send()});
+function add(t,r){var d=document.createElement('div');d.className='ms '+r;d.textContent=t;ch.appendChild(d);ch.scrollTop=ch.scrollHeight;return d}
+async function send(){var t=inp.value.trim();if(!t)return;inp.value='';add(t,'u');btn.disabled=true;var tp=document.createElement('div');tp.className='tp';tp.textContent='Thinking...';ch.appendChild(tp);ch.scrollTop=ch.scrollHeight;try{var r=await fetch(API+'/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,conversation_id:cid})});var d=await r.json();tp.remove();if(d.response){add(d.response,'a');cid=d.conversation_id}else{add('Error: '+(d.detail||'Unknown'),'a')}}catch(e){tp.remove();add('Error: '+e.message,'a')}btn.disabled=false;inp.focus()}
+</script>
+</body>
+</html>
